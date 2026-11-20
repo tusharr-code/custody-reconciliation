@@ -1,4 +1,4 @@
-<img width="1916" height="1017" alt="Transactions" src="https://github.com/user-attachments/assets/115eae84-b90e-4b28-84f1-35f2e5d62890" /># Custody Reconciliation Workbench
+
 
 **Automating Transaction Reconciliation, Position Reconciliation and Break Management**
 
