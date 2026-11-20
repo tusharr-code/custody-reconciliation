@@ -1,4 +1,4 @@
-# Custody Reconciliation Workbench
+<img width="1916" height="1017" alt="Transactions" src="https://github.com/user-attachments/assets/115eae84-b90e-4b28-84f1-35f2e5d62890" /># Custody Reconciliation Workbench
 
 **Automating Transaction Reconciliation, Position Reconciliation and Break Management**
 
@@ -7,7 +7,7 @@ A full-stack financial operations application that streamlines reconciliation be
 Built to demonstrate how financial domain knowledge and modern technology can improve reconciliation workflows, exception investigation and operational efficiency.
 
 **Developed by:** Tushar Ramugade
-**GitHub Repository:** https://github.com/tusharr-code/custody-reconciliation-workbench
+**GitHub Repository:** https://github.com/tusharr-code/custody-reconciliation
 
 ---
 
@@ -58,22 +58,22 @@ The Custody Reconciliation Workbench explores a technology-driven approach to th
 
 ## Application Screenshots
 
-### Dashboard
-<img width="1917" height="1022" alt="Position histody " src="https://github.com/user-attachments/assets/295c162c-0505-46d2-898f-781bec20c757" />
-
-
 ### Transaction Reconciliation
-<img width="1916" height="1017" alt="Transactions" src="https://github.com/user-attachments/assets/7b1dd669-0094-433b-acde-86a33df45fae" />
+<img width="1916" height="1017" alt="Transactions" src="https://github.com/user-attachments/assets/894d7c45-d450-42de-b88d-132ced77d1ae" />
+
 
 ### Position Reconciliation
-<img width="1916" height="1010" alt="Position" src="https://github.com/user-attachments/assets/b2fc6023-2097-44d0-b220-2767416fd3b5" />
+<img width="1916" height="1010" alt="Position" src="https://github.com/user-attachments/assets/f2f3ff7d-913d-4849-b97c-f67830dfbbc3" />
 
 
 ### Break Management
+<img width="1862" height="1000" alt="open breaks" src="https://github.com/user-attachments/assets/2b15d580-ac82-4679-8979-5de7e22ba88d" />
 
-<img width="1862" height="1000" alt="open breaks" src="https://github.com/user-attachments/assets/3301154e-d3e3-44ef-b4a9-172e53d3730e" />
 
- 
+
+### Position History
+<img width="1917" height="1022" alt="Position histody " src="https://github.com/user-attachments/assets/51e3c380-1796-408e-b5b6-1bcfd6619b45" />
+
 ---
 
 ## Technology Stack
@@ -94,7 +94,7 @@ The Custody Reconciliation Workbench explores a technology-driven approach to th
 ## Project Architecture
 
 ```
-custody-reconciliation-workbench
+custody-reconciliation
 │
 ├── frontend/                 React + Vite user interface
 │   └── src/
@@ -127,13 +127,13 @@ custody-reconciliation-workbench
 Clone the repository:
 
 ```bash
-git clone https://github.com/tusharr-code/custody-reconciliation-workbench.git
+git clone https://github.com/tusharr-code/custody-reconciliation.git
 ```
 
 Navigate to the project directory:
 
 ```bash
-cd custody-reconciliation-workbench
+cd custody-reconciliation
 ```
 
 Start the application:
