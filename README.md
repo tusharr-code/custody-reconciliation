@@ -1,106 +1,244 @@
-# Custody Reconciliation Workbench v2
+# Custody Reconciliation Workbench
 
-All sample data is fictional.
+**Automating Transaction Reconciliation, Position Reconciliation and Break Management**
 
-A reconciliation application that demonstrates custody-versus-internal-books reconciliation, exception management and operational reporting.
+A full-stack financial operations application that streamlines reconciliation between custodian records and internal accounting books.
 
-## Architecture
+Built to demonstrate how financial domain knowledge and modern technology can improve reconciliation workflows, exception investigation and operational efficiency.
 
-- **Frontend:** React + Vite (`frontend/`), reconciliation upload controls, transaction/position grids, Open Breaks, Position History entry point, run list and break investigation form.
-- **API:** FastAPI (`backend/app/main.py`), CSV ingestion/validation, reconciliation endpoints, break lifecycle endpoints, report export and OpenAPI docs.
-- **Database:** PostgreSQL 16 with SQLAlchemy models (`backend/app/models.py`).
-- **Processing:** Pandas for CSV ingestion; Decimal-based matching logic (`backend/app/reconciliation.py`).
+**Developed by:** Tushar Ramugade
+**GitHub Repository:** https://github.com/tusharr-code/custody-reconciliation-workbench
 
-## Start locally (Docker recommended)
+---
 
-Prerequisite: Docker Desktop / Docker Engine with Compose.
+## Project Overview
+
+In investment operations, reconciliation teams regularly compare custodian statements against internal accounting records to identify discrepancies, investigate exceptions and resolve outstanding breaks.
+
+Traditional reconciliation processes can involve significant manual effort, fragmented workflows and limited visibility into unresolved exceptions.
+
+The Custody Reconciliation Workbench explores a technology-driven approach to these challenges through automated matching, break identification and centralised exception management.
+
+---
+
+## Key Features
+
+### 1. Transaction Reconciliation
+- Compare custodian and internal transaction records.
+- Identify matched and unmatched transactions.
+- Highlight records missing from either side.
+- Identify quantity, price, amount, currency, trade date and settlement date discrepancies.
+- Configurable matching keys and tolerances (quantity, price, amount, date).
+
+### 2. Position Reconciliation
+- Compare security-level holdings between custodian and internal books.
+- Identify quantity differences and market value discrepancies.
+- Identify securities missing from either source.
+- Dated position snapshots stored for position history.
+
+### 3. Break Management
+- Centralised exception management with persistent break records.
+- Track open, investigating, pending-custodian and resolved breaks.
+- Record root causes, owners and investigation comments.
+- Audit event trail for run creation and break updates.
+
+### 4. Data Ingestion and Processing
+- Upload reconciliation input files in CSV format.
+- Flexible column aliases (for example `qty`, `ccy`, `trade_id`, `ticker`).
+- Validate incoming records and report row-level errors.
+- Combined files containing both `TRANSACTION` and `POSITION` rows are filtered automatically by the selected reconciliation type.
+- Process data using Python, Pandas and Decimal-based matching logic.
+
+### 5. Reporting and Export
+- Review complete matched and break results for every run.
+- Browse saved reconciliation runs and position history.
+- Export break records as CSV for operational review.
+
+---
+
+## Application Screenshots
+
+### Dashboard
+<img width="1917" height="1022" alt="Position histody " src="https://github.com/user-attachments/assets/295c162c-0505-46d2-898f-781bec20c757" />
+
+
+### Transaction Reconciliation
+<img width="1916" height="1017" alt="Transactions" src="https://github.com/user-attachments/assets/7b1dd669-0094-433b-acde-86a33df45fae" />
+
+### Position Reconciliation
+<img width="1916" height="1010" alt="Position" src="https://github.com/user-attachments/assets/b2fc6023-2097-44d0-b220-2767416fd3b5" />
+
+
+### Break Management
+
+<img width="1862" height="1000" alt="open breaks" src="https://github.com/user-attachments/assets/3301154e-d3e3-44ef-b4a9-172e53d3730e" />
+
+> Replace the screenshot filenames above with the exact names of your image files in the `screenshots/` folder.
+
+---
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | React, Vite |
+| Backend | Python, FastAPI |
+| Database | PostgreSQL 16, SQLAlchemy |
+| Data Processing | Pandas |
+| API | REST API with OpenAPI documentation |
+| Testing | Pytest |
+| Deployment Setup | Docker, Docker Compose |
+| Input Data | CSV |
+
+---
+
+## Project Architecture
+
+```
+custody-reconciliation-workbench
+│
+├── frontend/                 React + Vite user interface
+│   └── src/
+├── backend/
+│   ├── app/
+│   │   ├── main.py           FastAPI application and API endpoints
+│   │   ├── reconciliation.py Reconciliation engine and CSV validation
+│   │   ├── models.py         SQLAlchemy database models
+│   │   └── database.py       Database connection
+│   └── tests/                Unit tests
+├── database/
+│   └── schema.sql            PostgreSQL schema reference
+├── sample_data/              Fictional sample CSV files
+├── screenshots/              Application screenshots
+├── docker-compose.yml
+├── .env.example
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Docker Desktop / Docker Engine with Compose (recommended)
+- Or, for a manual setup: Python 3.11+, Node.js 20+ and npm, PostgreSQL 16
+
+### Run Using Docker
+
+Clone the repository:
+
+```bash
+git clone https://github.com/tusharr-code/custody-reconciliation-workbench.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd custody-reconciliation-workbench
+```
+
+Start the application:
 
 ```bash
 docker compose up --build
 ```
 
 Then open:
-- Frontend: http://localhost:5173
-- API health: http://localhost:8000/health
-- Interactive API docs: http://localhost:8000/docs
+
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| API health check | http://localhost:8000/health |
+| Interactive API docs | http://localhost:8000/docs |
 
 To stop: `docker compose down`. To reset the development database: `docker compose down -v` (deletes all local data).
 
-Development database credentials are intentionally simple and MUST be changed before any shared or production deployment.
+Development database credentials are intentionally simple and **must** be changed before any shared or production deployment. Copy `.env.example` if you want to run the API outside Docker.
 
-## Reconciliation workflow
-
-1. Select Transaction or Position.
-2. Select the business date.
-3. Upload custodian and internal CSV files with compatible columns.
-4. Click **Load & Reconcile**.
-5. Review matched and break records in the grid; open **Open Breaks** to assign root cause, owner, status and comments.
-6. Export break records as CSV.
-
-### Supported transaction columns
-`account` (or `account_id`), `transaction_id` (or `trade_id`), `security` (or `security_name`/`ticker`), `transaction_type`, `trade_date`, `settlement_date`, `quantity` (or `qty`), `price`, `net_amount` (or `amount`), `currency`.
-
-Matching defaults: account + transaction ID; quantity tolerance 0.000001; amount tolerance 0.01; price tolerance 0.0001; exact currency and trade/settlement dates. Config JSON can override transaction keys and tolerances.
-
-### Supported position columns
-`account`, `security` (or `security_name`/`ticker`), `currency`, `quantity` (or `qty`), `market_value` (or `value`), `price`.
-
-Matching defaults: account + security + currency; quantity tolerance 0.000001; market value tolerance 0.01.
-
-## Database entities
-
-| Table | Purpose |
-|---|---|
-| `users` | User identities and role placeholder |
-| `accounts` | Account reference data |
-| `securities` | Security master reference data, including ISIN/CUSIP |
-| `source_files` | Uploaded file metadata, hash, side and row count |
-| `transaction_records` | Custodian/internal transaction source records |
-| `position_snapshots` | Dated custodian/internal holdings snapshots |
-| `reconciliation_runs` | Run date, type, config and control totals |
-| `reconciliation_results` | Persistent matched/break result detail for each run |
-| `reconciliation_breaks` | Persistent exception, root cause, owner and status |
-| `break_comments` | Comment history |
-| `audit_events` | Entity change event trail |
-
-See `database/schema.sql` for the PostgreSQL DDL reference. SQLAlchemy creates the current model tables at API startup for this development build.
-
-## Sample data
-
-- `sample_data/custodian_sample.csv`
-- `sample_data/internal_sample.csv`
-- `sample_data/custodian_transactions.csv` and `sample_data/internal_transactions.csv`
-- `sample_data/custodian_positions.csv` and `sample_data/internal_positions.csv`
-
-The sample files contain transaction and position rows. For a transaction run, retain the `TRANSACTION` rows; for a position run, retain the `POSITION` rows. You can split them into separate files in a spreadsheet or text editor.
-
-## Tests
+### Run Tests
 
 ```bash
 cd backend
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pytest -q
 ```
 
-The unit tests cover matched records, missing-side records, quantity/amount/currency/date breaks and position market-value differences.
+---
 
-## Current limitations / production controls still required
+## How to Use
 
-This is a development foundation, not a production-ready financial control system. Before production:
+1. Select **Transaction** or **Position** as the reconciliation type.
+2. Select the business date.
+3. Upload the custodian CSV and the internal CSV (try the files in `sample_data/`).
+4. Click **Load & Reconcile**.
+5. Review matched records and breaks in the grids.
+6. Open **Open Breaks** and click **Investigate** to assign a root cause, owner, status and comment.
+7. Export break records using **Export breaks**.
 
-- Add SSO/OIDC, MFA, role-based authorization and least-privilege database roles.
-- Replace demo DB credentials; use secrets management, TLS, encryption at rest and key rotation.
-- Implement immutable, tamper-evident audit events with actor identity and before/after values for every material change.
-- Add maker-checker approval, segregation of duties and controlled break closure.
-- Add idempotency and duplicate-file detection enforcement, ingestion job retries, file quarantine and schema/version management.
-- Add account/security mapping tables and controlled reference-data maintenance; support ISIN/CUSIP/SEDOL/ticker crosswalks.
-- Review matching keys and tolerance policy with operations, including partial fills, reversals, cancellations, FX, fees, corporate actions, pending trades and settlement conventions.
-- Add robust duplicate-key handling and one-to-many/many-to-one matching strategies.
-- Persist complete reconciliation output detail for matched records, not only the imported source records and breaks.
-- Add pagination, retention policies, backups, monitoring, alerting, performance/load tests and disaster recovery.
-- Add comprehensive API authorization, upload size limits, malware scanning and security testing.
+### Supported Transaction Columns
+`account` (or `account_id`), `transaction_id` (or `trade_id`), `security` (or `security_name` / `ticker`), `transaction_type`, `trade_date`, `settlement_date`, `quantity` (or `qty`), `price`, `net_amount` (or `amount`), `currency`.
 
-The current API persists source records, dated position snapshots, run control totals, complete per-run match results, break records, comments and audit event entries. Position history is exposed through `/api/positions/history`; run details are exposed through `/api/runs/{run_id}/results`. User authentication is not implemented; audit actor IDs are currently nullable. Position History tab currently provides the navigation surface and run list; detailed historical snapshot search UI is a follow-up.
+Default matching: account + transaction ID, with quantity tolerance 0.000001, amount tolerance 0.01, price tolerance 0.0001, and exact currency and dates.
+
+### Supported Position Columns
+`account`, `security` (or `security_name` / `ticker`), `currency`, `quantity` (or `qty`), `market_value` (or `value`), `price`.
+
+Default matching: account + security + currency, with quantity tolerance 0.000001 and market value tolerance 0.01.
+
+---
+
+## Business Use Cases
+
+This project explores reconciliation workflows relevant to:
+
+- Custodian versus internal accounting reconciliation.
+- Fund accounting operations.
+- Investment operations.
+- Cash and position reconciliation.
+- Financial data quality monitoring.
+- Break investigation and exception management.
+
+---
+
+## Future Enhancements
+
+- Advanced one-to-many and many-to-one transaction matching.
+- Corporate action reconciliation.
+- User authentication and role-based access control.
+- Maker-checker approval workflow.
+- Tamper-evident audit trail with user identity.
+- Advanced reconciliation dashboards and analytics.
+- Detailed position history search interface.
+- Scheduled reconciliation and automated notifications.
+- Integration with external custodian data feeds.
+
+---
+
+## About the Developer
+
+I have 7.5+ years of experience in financial markets and investment operations, with practical exposure to reconciliation processes and exception investigation.
+
+This project reflects my interest in combining financial domain expertise with software development, data analytics and automation to solve practical challenges in financial operations.
+
+**Areas of Interest:**
+- Custody and Fund Accounting
+- Investment Operations
+- Financial Data Analytics
+- Reconciliation Automation
+- FinTech and Product Data Engineering
+
+**Connect with me:**
+- GitHub: https://github.com/tusharr-code
+- LinkedIn: https://www.linkedin.com/in/tushar-ramugade-3abbb915b
+
+---
+
+## Disclaimer
+
+This is a portfolio and learning project intended to demonstrate reconciliation concepts and application development. All sample data is fictional.
+
+It is not a production-ready financial reconciliation system. Production deployment would require additional security controls, authentication, auditability, operational resilience, data governance and comprehensive integration testing.
+
+If you find this project interesting, feel free to explore the repository, share feedback or connect for collaboration.
